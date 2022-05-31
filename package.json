@@ -1,0 +1,25 @@
+{
+  "name": "vsezapomnim",
+  "version": "1.0.0",
+  "description": "Shows all companies that have left the Russian Federation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foxodever/vsezapominm.git"
+  },
+  "author": "Foxodever",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/foxodever/vsezapominm/issues"
+  },
+  "homepage": "https://github.com/foxodever/vsezapominm#readme",
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}
