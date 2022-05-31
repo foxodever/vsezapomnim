@@ -8,17 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/foxodever/vsezapominm.git"
+    "url": "git+https://github.com/foxodever/vsezapomnim.git"
   },
   "author": "Foxodever",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/foxodever/vsezapominm/issues"
+    "url": "https://github.com/foxodever/vsezapomnim/issues"
   },
-  "homepage": "https://github.com/foxodever/vsezapominm#readme",
-  "devDependencies": {
-    "mocha": "^10.0.0"
-  },
+  "homepage": "https://github.com/foxodever/vsezapomnim#readme",
   "dependencies": {
     "axios": "^0.27.2"
   }
