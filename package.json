@@ -1,6 +1,6 @@
 {
   "name": "vsezapomnim",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Shows all companies that have left the Russian Federation",
   "main": "index.js",
   "scripts": {
