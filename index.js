@@ -3,7 +3,7 @@ const axios = require("axios");
 async function vsezapomnim() {
     return new Promise(async(resolve, reject) => {
         let finalObject = [];
-        load(1);
+        load(0);
         async function load(currentOffset) {
             axios.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get.ajax", "list_curr="+(30 * currentOffset)+"&catid=0&sortid=0&key=" + Math.round(Date.now()), {
                 headers: {
