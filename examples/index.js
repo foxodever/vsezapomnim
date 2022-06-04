@@ -1,4 +1,4 @@
-const vsezapomnim = require("../index")
+const { vsezapomnim } = require("../index")
 
 vsezapomnim().then(r => {
     console.log(r);
