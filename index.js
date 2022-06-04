@@ -31,5 +31,18 @@ async function vsezapomnim() {
         }
     })
 }
+async function fetchCompany(id) {
+    return new Promise(async(resolve, reject) => {
+        axios.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get-company.ajax", "company=" + id + "&key=" + Math.round(Date.now()), {
+            headers: {
+                "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53"
+            }
+        }).then(r => {
+            resolve(r.data)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
 
-module.exports = vsezapomnim;
+module.exports = { vsezapomnim, fetchCompany };
