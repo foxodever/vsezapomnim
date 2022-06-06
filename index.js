@@ -1,5 +1,30 @@
 const axios = require("axios");
 
+/**
+ * Get all companies
+ * @returns {Promise<[{
+ *  id: Number,
+ *  name: String,
+ *  clink: String,
+ *  logo: String,
+ *  date_exit: String,
+ *  rate_0: Number,
+ *  rate_1: Number,
+ *  rate_2: Number,
+ *  status: Number,
+ *  label_screw: Number,
+ *  label_fuck: Number,
+ *  label_respect: Number,
+ *  label_return: Number,
+ *  label_aggression: Number,
+ *  analogs: Number,
+ *  country: String,
+ *  country_name: String,
+ *  description: String,
+ *  updated: Number
+ * }]>} Promise object with info about companies
+ */
+
 async function vsezapomnim() {
     return new Promise(async(resolve, reject) => {
         let finalObject = [];
@@ -31,6 +56,46 @@ async function vsezapomnim() {
         }
     })
 }
+
+/**
+ * Get company info by id
+ * @param {Number} id - ID of the company on всезапомним.рф
+ * @returns {Promise<{
+ *  id: number,
+ *  data: {
+ *      id: number,
+ *      link: String,
+ *      altname: String,
+ *      name: String,
+ *      logo: String,
+ *      comment: String,
+ *      abuse: String,
+ *      description: String,
+ *      date_exit: String,
+ *      date_create: String,
+ *      date_update: String,
+ *      rate_0: Number,
+ *      rate_1: Number,
+ *      rate_2: Number,
+ *      status: Number,
+ *      views: String,
+ *      label_screw: Number,
+ *      label_fuck: Number,
+ *      label_respect: Number,
+ *      label_aggression: Number,
+ *      label_return: Number,
+ *      label_analogs: Number,
+ *      country: String,
+ *      country_flag: String,
+ *      proofs: String[],
+ *      login: String,
+ *      firstname: String,
+ *      lastname: String,
+ *      clink: String
+ *  }
+ * }>} Promise object with info about company
+ */
+
 async function fetchCompany(id) {
     return new Promise(async(resolve, reject) => {
         axios.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get-company.ajax", "company=" + id + "&key=" + Math.round(Date.now()), {
