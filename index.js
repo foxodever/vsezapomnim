@@ -1,7 +1,14 @@
 const axios = require("axios");
+const { SocksProxyAgent } = require('socks-proxy-agent');
 
 /**
  * Get all companies
+ * @param {Object} proxy Russian proxy to access всезапомним.рф
+ * @param {String} proxy.host Proxy host
+ * @param {Number} [proxy.port] Proxy port
+ * @param {String} [proxy.username=null]
+ * @param {String} [proxy.password=null]
+ * @param {String} [proxy.type]
  * @returns {Promise<[{
  *  id: Number,
  *  name: String,
@@ -25,15 +32,43 @@ const axios = require("axios");
  * }]>} Promise object with info about companies
  */
 
-async function vsezapomnim() {
+async function vsezapomnim(proxy = null) {
     return new Promise(async(resolve, reject) => {
         let finalObject = [];
+        let client;
+        if(proxy) {
+            if(!proxy.type) proxy.type = "https";
+            if(proxy.type == "http" || proxy.type == "https") {
+                client = axios;
+                proxy = {
+                    host: proxy.host,
+                    port: proxy.port,
+                }
+                if(proxy.username && proxy.password) {
+                    proxy.auth = {
+                        username: proxy.username, password: proxy.password
+                    }
+                }
+            } else if(proxy.type == "socks" || proxy.type == "socks4" || proxy.type == "socks5") {
+                let temp = proxy; proxy = null;
+                let auth = "";
+                if(temp.username && temp.password) auth = `${temp.username}@${temp.password}`;
+                const httpsAgent = new SocksProxyAgent(`${temp.type}://${temp.host}:${temp.port}${auth}`);
+                client = await axios.create({httpsAgent, httpAgent: httpsAgent});
+            } else {
+                reject("Invalid proxy body");
+                return;
+            }
+        } else {
+            client = axios;
+        }
         load(0);
         async function load(currentOffset) {
-            axios.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get.ajax", "list_curr="+(30 * currentOffset)+"&catid=0&sortid=0&key=" + Math.round(Date.now()), {
+            client.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get.ajax", "list_curr="+(30 * currentOffset)+"&catid=0&sortid=0&key=" + Math.round(Date.now()), {
                 headers: {
                     "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53"
-                }
+                },
+                proxy
             }).then(r => {
                 if(r.data.data) {
                     if(r.data.data.length != 0) {
@@ -51,7 +86,7 @@ async function vsezapomnim() {
                 }
             }).catch(err => {
                 if(finalObject.length > 0) resolve(finalObject);
-                else reject("Failed to parse")
+                else reject(err)
             })
         }
     })
@@ -60,6 +95,12 @@ async function vsezapomnim() {
 /**
  * Get company info by id
  * @param {Number} id - ID of the company on всезапомним.рф
+ * @param {Object} proxy Russian proxy to access всезапомним.рф
+ * @param {String} proxy.host Proxy host
+ * @param {Number} [proxy.port] Proxy port
+ * @param {String} [proxy.username=null]
+ * @param {String} [proxy.password=null]
+ * @param {String} [proxy.type]
  * @returns {Promise<{
  *  id: number,
  *  data: {
@@ -96,12 +137,40 @@ async function vsezapomnim() {
  * }>} Promise object with info about company
  */
 
-async function fetchCompany(id) {
+async function fetchCompany(id, proxy = null) {
     return new Promise(async(resolve, reject) => {
-        axios.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get-company.ajax", "company=" + id + "&key=" + Math.round(Date.now()), {
+        let client;
+        if(proxy) {
+            if(!proxy.type) proxy.type = "https";
+            if(proxy.type == "http" || proxy.type == "https") {
+                client = axios;
+                proxy = {
+                    host: proxy.host,
+                    port: proxy.port,
+                }
+                if(proxy.username && proxy.password) {
+                    proxy.auth = {
+                        username: proxy.username, password: proxy.password
+                    }
+                }
+            } else if(proxy.type == "socks" || proxy.type == "socks4" || proxy.type == "socks5") {
+                let temp = proxy; proxy = null;
+                let auth = "";
+                if(temp.username && temp.password) auth = `${temp.username}@${temp.password}`;
+                const httpsAgent = new SocksProxyAgent(`${temp.type}://${temp.host}:${temp.port}${auth}`);
+                client = await axios.create({httpsAgent, httpAgent: httpsAgent});
+            } else {
+                reject("Invalid proxy body");
+                return;
+            }
+        } else {
+            client = axios;
+        }
+        client.post("https://xn--80adjigxbghjs.xn--p1ai/?page_load=ajax&url=/ajax/get-company.ajax", "company=" + id + "&key=" + Math.round(Date.now()), {
             headers: {
                 "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.53"
-            }
+            },
+            proxy
         }).then(r => {
             resolve(r.data)
         }).catch(err => {
